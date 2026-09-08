@@ -69,8 +69,35 @@ INSERT INTO lojas_produtos(loja_id, produto_id, estoque) VALUES(2, 3, 10);
 INSERT INTO lojas_produtos(loja_id, produto_id, estoque) VALUES(1, 1, 5);
 
 INSERT INTO lojas_produtos(loja_id, produto_id, estoque) VALUES(4, 1, 2);
+```
 
+## UPDATE na tabela fornecedores
 
+```sql
+UPDATE fornecedores SET nome  = 'Mundo dos Games'
+WHERE id = 2;
+```
 
+## UPDATE na tabela produtos
 
-..
+```sql
+UPDATE produtos SET preco = 2999, quantidade = 5 WHERE id = 3;
+```
+
+## UPDATE na tabela lojas_produtos
+
+```sql
+UPDATE lojas_produtos SET estoque = 4 WHERE loja_id = 2 AND produto_id = 1;
+```
+
+## DELETE na tabela produtos
+
+```sql
+DELETE FROM produtos WHERE id = 2;
+```
+
+## DELETE na tabela fornecedores
+
+```sql
+DELETE FROM fornecedores WHERE id = 5;
+```
