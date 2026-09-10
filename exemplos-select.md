@@ -125,3 +125,184 @@ fornecedor_id = 1 OR
 fornecedor_id = 4 OR
 fornecedor_id = 8;
 ```
+
+### LIKE 
+
+'LIKE' é usado principalmente para realizar pesquisas
+em textos. Junto com o caractere '%' permite fazer
+buscas baseadas em partes de uma string.
+
+Exemplo: procurar produtos que tenham a palavra
+**Gamer** em qualquer posição do nome.
+
+```sql
+SELECT nome, preco FROM produtos
+WHERE nome LIKE '%Gamer%'
+```
+
+## DISTINCT
+
+Elimina valores repetidos do resultado da consulta.
+
+```sql
+SELECT DISTINCT fornecedor_id FROM produtos;
+```
+
+## ORDENAÇÃO (ou CLASSIFICAÇÃO)
+
+Usamos o 'ORDER BY' para organizar os registros do
+resultado.
+
+### Ordem crescente (padrão)
+
+Exemplos: do menor para o maior , ou de A-Z, de mais
+antigo para o mais recente.
+
+```sql
+SELECT nome, preco FROM produtos
+ORDER BY preco ASC;
+```
+
+### Ordem decrescente
+
+Exemplos: do maior para o menor, ou de Z-A, de mais
+recente para o mais antigo.
+
+```sql
+SELECT nome, preco FROM produtos
+ORDER BY preco DESC;
+```
+
+### Ordenando por mais de uma coluna
+
+```sql
+SELECT nome, preco FROM produtos
+ORDER BY preco DESC, nome ASC;
+```
+
+### Funções de agregação
+
+Funções de agregacão realizam cálculos ou processos em
+registros de um resultado.
+
+Entre as principais:
+
+- 'COUNT()' -> conta registros
+- 'SUM()' -> soma valores
+- 'AVG()' -> calcula a média de valores
+- 'MIN()' -> encontra o menor valor
+- 'MAX()' -> encontra o maior valor
+- 'ROUND()' -> arredonda valores e define casas decimais
+
+### COUNT
+
+Contando quantos registros existem na tabela produtos:
+
+```sql
+SELECT COUNT(*) AS total FROM produtos;
+```
+
+### SUM
+
+Somar quantidade de todos os produtos da tabela:
+
+```sql
+SELECT SUM(quantidade) FROM  produtos;
+```
+
+### AVG
+
+Calcular a média dos preços dos produtos:
+
+```sql
+SELECT AVG(preco) AS "Media dos Preços" FROM produtos;
+```
+
+### MIN
+
+Retornar o menor preço existente:
+
+```sql
+SELECT MIN(preco) AS menor_preco FROM produtos;
+```
+
+### MAX
+
+Retornar o maior preço existente:
+
+```sql
+SELECT MAX(preco) AS maior_preco FROM produtos;
+```
+
+### Combinando agregações
+
+```sql
+SELECT
+    COUNT(*) AS quantidade_produtos,
+    MIN(preco) AS menor_preco,
+    MAX(preco) AS maior_preco,
+    ROUND(AVG(preco), 2) AS preco_medio,
+FROM produtos;
+```
+
+## Recursos de agrupamento
+
+'GROUP BY' reúne registros que possuem um determinado
+valor em comum.
+
+Exemplo: descobrir quantos produtos existem em cada
+fornecedor.
+
+```sql
+SELECT fornecedor_id, COUNT(*) AS total_produto
+FROM PRODUTOS GROUP BY fornecedor_id;
+```
+
+### Determinando a média de preços por fornecedor
+
+```sql
+SELECT fornecedor_id, AVG(preco) AS preco_medio
+FROM.produtos GROUP BY fornecedor_id;
+```
+
+### HAVING
+
+'HAVING' permite filtrar os grupos criados pelo GROUP BY'.
+
+** Obs :** para usar o HAVING ** precisa ter ** GROUP BY.
+
+Exemplo: mostrar somente os fornecedores que possuem pelo
+menos dois produtos cadastrados.
+
+```sql
+SELECT fornecedor_id, COUNT(*) AS total_produtos
+FROM produtos GROUP BY fornecedor_id
+HAVING COUNT(*)>=2;
+```
+
+### Combinando WHERE, GROUP BY, HAVING e ORDER BY
+
+Objetivos:
+
+1. Considera produtos com quantidade maior que zero
+2. Agrupa por fornecedor
+3. Calcula a quantidade e preço médio de cada grupo
+4. Mantém apenas fornecedores com pelo menos dois produtos
+5. Ordena os grupos pelo preço médio
+
+```sql
+SELECT
+    fornecedor_id,
+    COUNT(*) AS total_produtos,
+    ROUND(AVG(preco), 2) AS preco_medio
+FROM produtos
+WHERE quantidade > 0
+GROUP BY fornecedor_id
+HAVING total_produtos >= 2
+ORDER BY preco_medio DESC;
+```
+**Obs :** ao combinar estes recursos, a ordem deve ser:
+
+1. WHERE
+2. GROUP BY/HAVING
+3. ORDER BY
