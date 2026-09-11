@@ -24,7 +24,7 @@ Usamos o commando 'AS' para criar um **Apelido (alias)**
 ```sql
 SELECT
     nome AS produto,
-    preco AS valor, 
+    preco AS valor
 FROM produtos;
 ```    
 
@@ -78,7 +78,7 @@ Exibir os produtos que custem mais de 3000 ou com
 quantidade zerada.
 
 ```sql
-SELECT nome, preco, quantidade FROM
+SELECT nome, preco, quantidade FROM produtos
 WHERE preco > 3000 OR quantidade = 0;
 ```
 
@@ -137,7 +137,7 @@ Exemplo: procurar produtos que tenham a palavra
 
 ```sql
 SELECT nome, preco FROM produtos
-WHERE nome LIKE '%Gamer%'
+WHERE nome LIKE '%Gamer%';
 ```
 
 ## DISTINCT
@@ -241,7 +241,7 @@ SELECT
     COUNT(*) AS quantidade_produtos,
     MIN(preco) AS menor_preco,
     MAX(preco) AS maior_preco,
-    ROUND(AVG(preco), 2) AS preco_medio,
+    ROUND(AVG(preco), 2) AS preco_medio
 FROM produtos;
 ```
 
@@ -262,7 +262,7 @@ FROM PRODUTOS GROUP BY fornecedor_id;
 
 ```sql
 SELECT fornecedor_id, AVG(preco) AS preco_medio
-FROM.produtos GROUP BY fornecedor_id;
+FROM produtos GROUP BY fornecedor_id;
 ```
 
 ### HAVING
@@ -298,7 +298,7 @@ SELECT
 FROM produtos
 WHERE quantidade > 0
 GROUP BY fornecedor_id
-HAVING total_produtos >= 2
+HAVING COUNT(*) >= 2
 ORDER BY preco_medio DESC;
 ```
 **Obs:** ao combinar estes recursos, a ordem deve ser:
@@ -341,19 +341,19 @@ INNER JOIN fornecedores
    ON produtos.fornecedor_id = fornecedores.id;
 ```
 
-### Apelidos (alias) para tabelas
+### Consulta sem abreviações para tabelas
 
-Podemos usar apelidos para tornar consultas maiores mais
-compactas.
+Podemos escrever os nomes completos das tabelas para deixar a
+consulta mais clara.
 
 ```sql
 SELECT
-    p.nome AS produto,
-    p.preco,
-    f. nome AS fornecedor
-FROM produtos AS p
-INNER JOIN fornecedores AS f
-    ON p.fornecedor_id = f.id;
+    produtos.nome AS produto,
+    produtos.preco,
+    fornecedores.nome AS fornecedor
+FROM produtos
+INNER JOIN fornecedores
+    ON produtos.fornecedor_id = fornecedores.id;
 ```
 
 ### JOIN com filtro
@@ -365,9 +365,9 @@ mostrando também o nome de seus fornecedores
 SELECT
     produtos.nome AS produto,
     produtos.preco,
-    fornecedores. nome
+    fornecedores.nome
 FROM produtos INNER JOIN fornecedores
-   ON produtos. fornecedor_id = fornecedores.id
+   ON produtos.fornecedor_id = fornecedores.id
 WHERE produtos.preco > 1000;
 ```
 
@@ -379,21 +379,11 @@ qual é seu estoque naquela loja
 ```sql
 SELECT
     produtos.nome AS produto,
-    produtos.preco,
-    fornecedores. nome
-FROM produtos INNER JOIN fornecedores
-   ON produtos. fornecedor_id = fornecedores.id
-WHERE produtos.preco > 1000;
-```
-
-```sql
-SELECT
-    produtos.nome AS produto,
     lojas.nome AS loja,
-    lojasprodutos.estoque
-FROM lojas_produtos AS lojas_produtos
-INNER JOIN produtos AS produto
-    ON lojasprodutos.produto_id = p.id
-INNER JOIN lojas AS l
-    ON lojasprodutos.loja_id = lojas.id;
+    lojas_produtos.estoque
+FROM lojas_produtos
+INNER JOIN produtos
+    ON lojas_produtos.produto_id = produtos.id
+INNER JOIN lojas
+    ON lojas_produtos.loja_id = lojas.id;
 ```
