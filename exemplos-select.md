@@ -301,8 +301,99 @@ GROUP BY fornecedor_id
 HAVING total_produtos >= 2
 ORDER BY preco_medio DESC;
 ```
-**Obs :** ao combinar estes recursos, a ordem deve ser:
+**Obs:** ao combinar estes recursos, a ordem deve ser:
 
 1. WHERE
 2. GROUP BY/HAVING
 3. ORDER BY
+
+
+## JOIN
+
+Até agora consultamos principalmente dados existentes em
+** uma única tabela **.
+
+Porém, nosso banco possui informações relacionadas ** entre
+várias tabelas .**
+
+Por exemplo:
+
+- `produtos' possui 'fornecedor_id'
+- *fornecedores' possui o nome dos fornecedores
+
+O 'JOIN' permite **combinar informacoes de tabelas
+relacionadas** na consulta com 'SELECT'.
+
+### INNER JOIN entre produtos e fornecedores
+
+Exibir nome dos fornecedores de cada produto:
+
+```sql
+SELECT
+    produtos.nome AS produto,
+    produtos.preco,
+    fornecedores.nome AS fornecedor
+FROM produtos 
+
+-- Fazendo a junção (JOIN) entre as tabelas
+-- Neste caso, produtos com fornecedores
+INNER JOIN fornecedores
+   ON produtos.fornecedor_id = fornecedores.id;
+```
+
+### Apelidos (alias) para tabelas
+
+Podemos usar apelidos para tornar consultas maiores mais
+compactas.
+
+```sql
+SELECT
+    p.nome AS produto,
+    p.preco,
+    f. nome AS fornecedor
+FROM produtos AS p
+INNER JOIN fornecedores AS f
+    ON p.fornecedor_id = f.id;
+```
+
+### JOIN com filtro
+
+Exibir somente os produtos com preço superior a R$ 1000
+mostrando também o nome de seus fornecedores
+
+```sql
+SELECT
+    produtos.nome AS produto,
+    produtos.preco,
+    fornecedores. nome
+FROM produtos INNER JOIN fornecedores
+   ON produtos. fornecedor_id = fornecedores.id
+WHERE produtos.preco > 1000;
+```
+
+### Desafio: JOIN envolvendo 3 tabelas
+
+Objetivo: descobrir qual produto é vendido em qual loja e
+qual é seu estoque naquela loja
+
+```sql
+SELECT
+    produtos.nome AS produto,
+    produtos.preco,
+    fornecedores. nome
+FROM produtos INNER JOIN fornecedores
+   ON produtos. fornecedor_id = fornecedores.id
+WHERE produtos.preco > 1000;
+```
+
+```sql
+SELECT
+    produtos.nome AS produto,
+    lojas.nome AS loja,
+    lojasprodutos.estoque
+FROM lojas_produtos AS lojas_produtos
+INNER JOIN produtos AS produto
+    ON lojasprodutos.produto_id = p.id
+INNER JOIN lojas AS l
+    ON lojasprodutos.loja_id = lojas.id;
+```
